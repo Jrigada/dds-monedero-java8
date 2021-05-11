@@ -52,7 +52,7 @@ public class Cuenta {
   }
 
   public void sacar(double cuanto) {
-    
+
     montoMayorACero(cuanto);
 
     if (getSaldo() - cuanto < 0) {
@@ -76,8 +76,7 @@ public class Cuenta {
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
-        //le preguntaria al movimiento si es de una fecha directamente
+        .filter(movimiento -> !movimiento.isDeposito() && movimiento.esDeLaFecha(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
