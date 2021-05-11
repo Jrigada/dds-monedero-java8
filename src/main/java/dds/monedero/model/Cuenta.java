@@ -33,10 +33,15 @@ public class Cuenta {
         .count()>=numeroMovimientos;
   }
 
-  public void poner(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+  public void montoMayorACero(double monto) {
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
     }
+  }
+
+  public void poner(double cuanto) {
+
+    montoMayorACero(cuanto);
 
     if (cantidadDeMovimientosEnElDiaMayorA(3)) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
@@ -47,9 +52,9 @@ public class Cuenta {
   }
 
   public void sacar(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    } //esto se puede extraer a un metodo comun para evitar repetir la logica en poner y sacar
+    
+    montoMayorACero(cuanto);
+
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
