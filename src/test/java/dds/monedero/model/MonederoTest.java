@@ -42,7 +42,7 @@ public class MonederoTest {
 
   @Test
   void prescripcionDeLimitanteDeMovimientosPorDia() {
-    new Movimiento(LocalDate.of(2019,05,10),100,true).agregateA(cuenta);
+    cuenta.agregarMovimiento(LocalDate.of(2019,05,10),100,true);
     cuenta.poner(1500);
     cuenta.poner(456);
     cuenta.poner(1900);

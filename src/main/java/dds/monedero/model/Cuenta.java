@@ -47,8 +47,7 @@ public class Cuenta {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
 
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
-    //
+    agregarMovimiento(LocalDate.now(),cuanto,true);
   }
 
   public void sacar(double cuanto) {
@@ -63,16 +62,16 @@ public class Cuenta {
     if (cuanto > limite) {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
-      //
     }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    agregarMovimiento(LocalDate.now(),cuanto,false);
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
     Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
     movimientos.add(movimiento);
-  }
-  //muchos parametros, yo delegaria en dos metodos distintos uno para deposito y otro para extraccion
+    double valorMovimiento = movimiento.getMonto();
+    setSaldo(saldo + valorMovimiento);
+    }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
