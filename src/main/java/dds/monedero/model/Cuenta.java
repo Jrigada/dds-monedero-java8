@@ -13,6 +13,7 @@ public class Cuenta {
 
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
+  private double limite = 1000;
 
   public Cuenta() {
     saldo = 0;
@@ -50,7 +51,7 @@ public class Cuenta {
     agregarMovimiento(LocalDate.now(),cuanto,true);
   }
 
-  public boolean excedeLimiteDeSaldo(double cantidad) {
+  public void excedeLimiteDeSaldo(double cantidad) {
     if (getSaldo() - cantidad < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
@@ -63,12 +64,18 @@ public class Cuenta {
     excedeLimiteDeSaldo(cuanto);
 
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
-    if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+    limite = 1000 - montoExtraidoHoy;
+
+    excedeLimiteDeCuenta(cuanto);
+
+    agregarMovimiento(LocalDate.now(),cuanto,false);
+  }
+
+  public void excedeLimiteDeCuenta(double cantidad){
+    if (cantidad > limite) {
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + limite
           + " diarios, límite: " + limite);
     }
-    agregarMovimiento(LocalDate.now(),cuanto,false);
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
